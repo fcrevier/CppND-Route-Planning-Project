@@ -26,6 +26,16 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
         return std::nullopt;
     return std::move(contents);
 }
+float InputCoordinate(std::string name, float min, float max){
+    float value;
+    std::cout << name << " = "; 
+    std::cin >> value;
+    while (value < min || value > max){ 
+        std::cout << "Invalid input." << std::endl << name << " = ";  
+        std::cin >> value;
+    }
+    return value;
+}
 
 int main(int argc, const char **argv)
 {    
@@ -55,15 +65,15 @@ int main(int argc, const char **argv)
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
-    float start_x, start_y, end_x, end_y;
-    //*
-    /* std::cout << "Input start coordinates x1 y1 x2 y2" << std::endl;
-    std::cin >> start_x;
-    std::cin >> end_x;
-    std::cin >> start_y;
-    std::cin >> end_y;
-     */
-    start_x = 10; start_y = 10; end_x = 90; end_y = 90;
+    float start_x, start_y, end_x, end_y, lower_limit, upper_limit;
+    lower_limit = 0;
+    upper_limit = 100;
+
+    std::cout << "Input coordinates (range ["<<lower_limit<<"-"<<upper_limit<<"])" << std::endl;
+    start_x = InputCoordinate("start_x", lower_limit, upper_limit);
+    start_y = InputCoordinate("start_y", lower_limit, upper_limit);
+    end_x = InputCoordinate("end_x", lower_limit, upper_limit);
+    end_y = InputCoordinate("end_y", lower_limit, upper_limit);
 
     // Build Model.
     RouteModel model{osm_data};
