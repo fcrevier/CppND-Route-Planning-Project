@@ -21,7 +21,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 
     if( contents.empty() )
         return std::nullopt;
-    return std::move(contents);
+    return std::move(contents); 
 }
 
 std::vector<std::byte> ReadOSMData(const std::string &path) {
