@@ -1,5 +1,4 @@
 *.swp
-*.osm
 *.o
 *.DS_Store
 draw.cpp
