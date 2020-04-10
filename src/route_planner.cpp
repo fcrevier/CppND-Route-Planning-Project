@@ -23,7 +23,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-   return end_node->distance(*node);
+   return node->distance(*end_node);
 }
 
 
@@ -81,22 +81,16 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     // Create path_found vector
     distance = 0.0f;
     std::vector<RouteModel::Node> path_found{*current_node};
-    std::vector<RouteModel::Node *> path_found_ptr{current_node};
+
     // TODO: Implement your solution here.
     while (current_node != start_node) {
         path_found.push_back(*(current_node->parent));
-        path_found_ptr.push_back(current_node->parent);
         distance += current_node->distance(*(current_node->parent));
         current_node = current_node->parent;
     }
-    cout << current_node << endl << start_node << endl << endl;
     std::reverse(path_found.begin(), path_found.end());
-    std::reverse(path_found_ptr.begin(), path_found_ptr.end());
-    cout << path_found_ptr[0] << "  " << start_node << endl;
-    cout << path_found_ptr[path_found_ptr.size()-1] << "  " << end_node << endl;
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
-
 }
 
 
@@ -109,16 +103,16 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = start_node;
-    start_node->visited = true;
+    open_list.push_back(current_node);
+    current_node->visited = true;
     // TODO: Implement your solution here.
-    RoutePlanner::AddNeighbors(current_node);
     while (!open_list.empty()){
         RoutePlanner::AddNeighbors(current_node);
-        current_node = RoutePlanner::NextNode();
         if (current_node == end_node) {
             m_Model.path = RoutePlanner::ConstructFinalPath(current_node);
             return;
         }
+        current_node = RoutePlanner::NextNode();
     }
 
 }

@@ -7,3 +7,4 @@ build/
 bin/
 lib/
 thirdparty/P0267_RefImpl/
+.vscode/
